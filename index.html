@@ -482,9 +482,11 @@
   /* Plane decoration (subtle) */
   .plane-deco {
     position: fixed; pointer-events: none; z-index: 1;
-    opacity: 0.06; font-size: 80px;
+    opacity: 0.25; font-size: 80px;
     animation: flyAcross 25s linear infinite;
+    transition: opacity 0.5s;
   }
+  .plane-deco.dim { opacity: 0.04; }
   @keyframes flyAcross {
     0%   { transform: translate(-120px, 0) rotate(-15deg); left: 0; top: 15%; }
     100% { transform: translate(calc(100vw + 120px), -80px) rotate(-15deg); left: 0; top: 15%; }
@@ -690,8 +692,8 @@
     <div class="score-denom" id="final-denom">/ 8</div>
   </div>
   <div class="winner-banner" id="winner-banner">
-    <div class="winner-banner-title">🏆 ACE CONTROLLER — CLEARED TO LAND</div>
-    <div class="winner-banner-sub">SHOW THIS SCREEN TO CLAIM YOUR PRIZE</div>
+    <div class="winner-banner-title">🏆 TOWER COMMANDER — PERFECT SCORE</div>
+    <div class="winner-banner-sub">ALL 5 INCIDENTS CLEARED · YOU RUN THIS TOWER</div>
   </div>
   <div class="rank-label" id="rank-label"></div>
   <div class="rank-sub"   id="rank-sub"></div>
@@ -888,7 +890,7 @@ function shuffle(arr) {
 }
 
 let incidents, currentIdx, score, results, timerInterval, timeLeft, answered;
-const TIMER_SEC = 10;
+const TIMER_SEC = 25;
 
 function startGame() {
   incidents = shuffle(INCIDENTS).slice(0, 5);
@@ -1164,17 +1166,17 @@ function showResults() {
 
   let rank, sub;
   if (score === 5) {
-    rank = '🏆 ACE CONTROLLER';
-    sub = 'Perfect routing. Every incident cleared correctly.\nYou think like a control tower.';
+    rank = '🏆 TOWER COMMANDER';
+    sub = 'Flawless. Every flight cleared, every decision spot-on.\nThe skies are safe with you in charge.';
   } else if (score >= WINNER_THRESHOLD) {
-    rank = '✈ SENIOR CONTROLLER';
-    sub = 'Strong instincts. ' + score + ' of 5 cleared.\nEA + QE + AI — you get it.';
+    rank = '✈ CLEARED FOR LANDING';
+    sub = score + ' out of 5 — sharp instincts, smooth approach.\nYou\'re thinking like a controller.';
   } else if (score >= 3) {
-    rank = '📡 JUNIOR CONTROLLER';
-    sub = 'Solid awareness. A few more reps\nand you\'ll be cleared for takeoff.';
+    rank = '📡 SIGNAL ACQUIRED';
+    sub = 'Solid read on the situation. A few turbulent calls,\nbut your instincts are dialing in nicely.';
   } else {
-    rank = '🔧 IN TRAINING';
-    sub = 'Good attempt. Come talk to us —\nwe\'ll walk you through the right routes.';
+    rank = '🛫 WHEELS UP, KEEP CLIMBING';
+    sub = 'Every expert started here. Come chat with us —\nthe best flights take off from curiosity.';
   }
 
   document.getElementById('rank-label').textContent = rank;
@@ -1198,6 +1200,8 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => {
     s.classList.toggle('hidden', s.id !== id);
   });
+  const plane = document.querySelector('.plane-deco');
+  if (plane) plane.classList.toggle('dim', id !== 'splash');
 }
 </script>
 </body>
